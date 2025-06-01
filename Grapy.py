@@ -1,8 +1,10 @@
-import re
 import heapq
 import random
-import networkx as nx
+import re
+
 import matplotlib.pyplot as plt
+import networkx as nx
+import matplotlib
 from collections import defaultdict
 
 
@@ -17,9 +19,6 @@ def process_text(file_path):
 
 def build_graph(words):
     graph = defaultdict(lambda: defaultdict(int))
-    all_words = set(words)
-    for word in all_words:
-        graph[word]  # 确保所有单词作为节点存在
     for i in range(len(words) - 1):
         current, next_word = words[i], words[i + 1]
         graph[current][next_word] += 1
@@ -235,7 +234,7 @@ def show_directed_graph(graph, save_path=None):
 
     plt.figure(figsize=(12, 8))
     pos = nx.spring_layout(G, k=0.5, iterations=50)
-    nx.draw_networkx_nodes(G, pos, node_size=800, node_color='skyblue')
+    nx.draw_networkx_nodes(G, pos, node_size=800, node_color='SkyBlue')
     nx.draw_networkx_edges(G, pos, edge_color='gray', width=1.5, arrows=True, arrowsize=20)
     nx.draw_networkx_labels(G, pos, font_size=12)
     edge_labels = {(u, v): d['weight'] for u, v, d in G.edges(data=True)}
@@ -295,9 +294,9 @@ def main():
 
 if __name__ == "__main__":
     try:
-        import matplotlib
-
         matplotlib.use('TkAgg')
-    except:
-        pass
+    except ImportError:
+        print("Matplotlib not found. Plotting disabled.")
+    except AttributeError:
+        print("Matplotlib backend configuration failed.")
     main()
